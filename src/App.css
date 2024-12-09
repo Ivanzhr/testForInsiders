@@ -1,0 +1,17 @@
+nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 5px;
+}
+.nav-link {
+    display: block;
+    padding: 10px 25px;
+    text-decoration: none;
+    color: black;
+    border: 1px solid #cdcdcd;
+  }
+  
+.nav-link.active-link {
+    background-color: gray;
+}

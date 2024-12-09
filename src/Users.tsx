@@ -17,15 +17,12 @@ function User() {
     useEffect(() => {
         const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
         setUsers(storedUsers);
-        if (isModalOpen) {
-            const storageCountries = JSON.parse(localStorage.getItem('countries')) || [];
+        const storageCountries = JSON.parse(localStorage.getItem('countries')) || [];
             const storageDepartments = JSON.parse(localStorage.getItem('departments')) || [];
             const storageStatuses = JSON.parse(localStorage.getItem('statuses')) || [];
             setCountries(storageCountries);
             setDepartments(storageDepartments);
             setStatuses(storageStatuses);
-            console.log(departments)
-        }
     }, [isModalOpen]);
 
     const handleDelete = (index) => {
@@ -48,7 +45,26 @@ function User() {
         <div>
             <h1>Users</h1>
             <div className="top">
-                <div>Filter</div>
+                <div className="filter">
+                    <select name="">
+                        <option value="">Select department</option>
+                        {departments.map((dep, index) => (
+                        <option key={index} value={dep.value}>{dep.name}</option>
+                        ))}
+                    </select>
+                    <select name="">
+                        <option value="">Select country</option>
+                        {countries.map((country, index) => (
+                            <option key={index} value={country.value}>{country.name}</option>
+                        ))}
+                    </select>
+                    <select name="">
+                        <option value="">Select status</option>
+                        {statuses.map((status, index) => (
+                            <option key={index} value={status.value}>{status.name}</option>
+                        ))}
+                    </select>
+                </div>
                 <button onClick={() => setIsModalOpen(true)}>addUser</button>
             </div>
             <table border="1">

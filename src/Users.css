@@ -35,6 +35,10 @@ button:hover {
     background-color: #0056b3;
 }
 
+button:disabled {
+    background-color: #676767;
+}
+
 .modal {
     position: fixed;
     top: 50%;
@@ -51,7 +55,7 @@ button:hover {
     margin-top: 0;
 }
 
-.modal input, .modal select {
+.modal input, .modal select, select {
     width: 100%;
     padding: 8px;
     margin: 10px 0;

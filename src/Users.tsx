@@ -17,7 +17,7 @@ function User() {
     useEffect(() => {
         const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
         setUsers(storedUsers);
-        const storageCountries = JSON.parse(localStorage.getItem('countries')) || [];
+            const storageCountries = JSON.parse(localStorage.getItem('countries')) || [];
             const storageDepartments = JSON.parse(localStorage.getItem('departments')) || [];
             const storageStatuses = JSON.parse(localStorage.getItem('statuses')) || [];
             setCountries(storageCountries);
@@ -103,6 +103,7 @@ function User() {
 
                 <label>Department</label>
                 <select 
+                    className="form-select"
                     name="department" 
                     value={newUser.department.value}
                     onChange={(e) => setNewUser({
@@ -119,6 +120,7 @@ function User() {
                 <select 
                     name="country" 
                     value={newUser.country.value}
+                    class="form-select"
                     onChange={(e) => setNewUser({
                         ...newUser,
                         country: { name: e.target.options[e.target.selectedIndex].text, value: e.target.value }
@@ -144,8 +146,8 @@ function User() {
                 </select>
 
                 <div>
-                    <button onClick={handleAddUser}>Add</button> {/* Кнопка для додавання користувача */}
-                    <button onClick={handleCancel}>Cancel</button> {/* Кнопка для скасування */}
+                    <button onClick={handleAddUser}>Add</button> 
+                    <button onClick={handleCancel}>Cancel</button> 
                 </div>
             </div>
             )}

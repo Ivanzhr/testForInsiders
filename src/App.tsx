@@ -12,8 +12,8 @@ const Header = () => {
   return (
     <header>
       <nav>
-        <Link to="/users" className={`nav-link ${isActive('/users')}`}>Користувачі</Link>
-        <Link to="/edit-user" className={`nav-link ${isActive('/edit-user')}`}>Редагувати користувача</Link>
+        <Link to="/users" className={`nav-link ${isActive('/users')}`}>User</Link>
+        <Link to="/edit-user" className={`nav-link ${isActive('/edit-user')}`}>Edit Users</Link>
       </nav>
     </header>
   )

@@ -1,24 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
+import {useEffect } from 'react';
+import { Users, Countries, Departments, Statuses } from './data.ts';
 import './App.css';
+import User from './Users.tsx';
 
 function App() {
+
+  useEffect(()=> {
+    if(!localStorage.getItem('users')){
+      localStorage.setItem('users', JSON.stringify(Users));
+      localStorage.setItem('countries', JSON.stringify(Countries));
+      localStorage.setItem('departments', JSON.stringify(Departments));
+      localStorage.setItem('statuses', JSON.stringify(Statuses));
+    }
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <User/>
     </div>
   );
 }

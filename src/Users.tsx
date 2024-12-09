@@ -13,16 +13,21 @@ function User() {
     const [countries, setCountries] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [statuses, setStatuses] = useState([]);
+    const [filters, setFilters] = useState({
+        department: '',
+        country: '',
+        status: ''
+    });
 
     useEffect(() => {
         const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
         setUsers(storedUsers);
-            const storageCountries = JSON.parse(localStorage.getItem('countries')) || [];
-            const storageDepartments = JSON.parse(localStorage.getItem('departments')) || [];
-            const storageStatuses = JSON.parse(localStorage.getItem('statuses')) || [];
-            setCountries(storageCountries);
-            setDepartments(storageDepartments);
-            setStatuses(storageStatuses);
+        const storageCountries = JSON.parse(localStorage.getItem('countries')) || [];
+        const storageDepartments = JSON.parse(localStorage.getItem('departments')) || [];
+        const storageStatuses = JSON.parse(localStorage.getItem('statuses')) || [];
+        setCountries(storageCountries);
+        setDepartments(storageDepartments);
+        setStatuses(storageStatuses);
     }, [isModalOpen]);
 
     const handleDelete = (index) => {
@@ -32,40 +37,57 @@ function User() {
     };
 
     const handleAddUser = () => {
-        setUsers([...users, newUser])
-        localStorage.setItem('users', JSON.stringify([...users, newUser]));
-        setIsModalOpen(false)
-    }
+        if (newUser.name) {
+            setUsers([...users, newUser]);
+            localStorage.setItem('users', JSON.stringify([...users, newUser]));
+            setIsModalOpen(false);
+        }
+    };
 
     const handleCancel = () => {
-        setIsModalOpen(false)
-    }
+        setIsModalOpen(false);
+    };
+
+    const filterUsers = (e, type) => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [type]: e.target.value
+        }));
+    };
+
+    const filteredUsers = users.filter((user) => {
+        return (
+            (filters.department ? user.department.value === filters.department : true) &&
+            (filters.country ? user.country.value === filters.country : true) &&
+            (filters.status ? user.status.value === filters.status : true)
+        );
+    });
 
     return (
         <div>
             <h1>Users</h1>
             <div className="top">
                 <div className="filter">
-                    <select name="">
+                    <select onChange={(e) => filterUsers(e, 'department')}>
                         <option value="">Select department</option>
                         {departments.map((dep, index) => (
-                        <option key={index} value={dep.value}>{dep.name}</option>
+                            <option key={index} value={dep.value}>{dep.name}</option>
                         ))}
                     </select>
-                    <select name="">
+                    <select onChange={(e) => filterUsers(e, 'country')}>
                         <option value="">Select country</option>
                         {countries.map((country, index) => (
                             <option key={index} value={country.value}>{country.name}</option>
                         ))}
                     </select>
-                    <select name="">
+                    <select onChange={(e) => filterUsers(e, 'status')}>
                         <option value="">Select status</option>
                         {statuses.map((status, index) => (
                             <option key={index} value={status.value}>{status.name}</option>
                         ))}
                     </select>
                 </div>
-                <button onClick={() => setIsModalOpen(true)}>addUser</button>
+                <button onClick={() => setIsModalOpen(true)}>Add User</button>
             </div>
             <table border="1">
                 <thead>
@@ -77,7 +99,7 @@ function User() {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user, index) => (
+                    {filteredUsers.map((user, index) => (
                         <tr key={index}>
                             <td>{user.name}</td>
                             <td>{user.department.name}</td>
@@ -92,66 +114,73 @@ function User() {
             </table>
             {isModalOpen && (
                 <div className="modal">
-                <h2>ADD USER</h2>
-                <label>Full Name</label>
-                <input 
-                    type="text"
-                    name="name"
-                    value={newUser.name}
-                    onChange={(e) => setNewUser({...newUser, name: e.target.value})}
-                    placeholder="Full Name" />
+                    <h2>ADD USER</h2>
+                    <label>Full Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        value={newUser.name}
+                        onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                        placeholder="Full Name"
+                    />
 
-                <label>Department</label>
-                <select 
-                    className="form-select"
-                    name="department" 
-                    value={newUser.department.value}
-                    onChange={(e) => setNewUser({
-                        ...newUser,
-                        department: { name: e.target.options[e.target.selectedIndex].text, value: e.target.value }
-                    })}>
-                    <option value="">Select department</option>
-                    {departments.map((dep, index) => (
-                        <option key={index} value={dep.value}>{dep.name}</option>
-                    ))}
-                </select>
+                    <label>Department</label>
+                    <select
+                        name="department"
+                        value={newUser.department.value}
+                        onChange={(e) =>
+                            setNewUser({
+                                ...newUser,
+                                department: { name: e.target.options[e.target.selectedIndex].text, value: e.target.value }
+                            })
+                        }
+                    >
+                        <option value="">Select department</option>
+                        {departments.map((dep, index) => (
+                            <option key={index} value={dep.value}>{dep.name}</option>
+                        ))}
+                    </select>
 
-                <label>Country</label>
-                <select 
-                    name="country" 
-                    value={newUser.country.value}
-                    class="form-select"
-                    onChange={(e) => setNewUser({
-                        ...newUser,
-                        country: { name: e.target.options[e.target.selectedIndex].text, value: e.target.value }
-                    })}>
-                    <option value="">Select country</option>
-                    {countries.map((country, index) => (
-                        <option key={index} value={country.value}>{country.name}</option>
-                    ))}
-                </select>
+                    <label>Country</label>
+                    <select
+                        name="country"
+                        value={newUser.country.value}
+                        onChange={(e) =>
+                            setNewUser({
+                                ...newUser,
+                                country: { name: e.target.options[e.target.selectedIndex].text, value: e.target.value }
+                            })
+                        }
+                    >
+                        <option value="">Select country</option>
+                        {countries.map((country, index) => (
+                            <option key={index} value={country.value}>{country.name}</option>
+                        ))}
+                    </select>
 
-                <label>Status</label>
-                <select 
-                    name="status" 
-                    value={newUser.status.value}
-                    onChange={(e) => setNewUser({
-                        ...newUser,
-                        status: { name: e.target.options[e.target.selectedIndex].text, value: e.target.value }
-                    })}>
-                    <option value="">Select status</option>
-                    {statuses.map((status, index) => (
-                        <option key={index} value={status.value}>{status.name}</option>
-                    ))}
-                </select>
+                    <label>Status</label>
+                    <select
+                        name="status"
+                        value={newUser.status.value}
+                        onChange={(e) =>
+                            setNewUser({
+                                ...newUser,
+                                status: { name: e.target.options[e.target.selectedIndex].text, value: e.target.value }
+                            })
+                        }
+                    >
+                        <option value="">Select status</option>
+                        {statuses.map((status, index) => (
+                            <option key={index} value={status.value}>{status.name}</option>
+                        ))}
+                    </select>
 
-                <div>
-                    <button onClick={handleAddUser}>Add</button> 
-                    <button onClick={handleCancel}>Cancel</button> 
+                    <div>
+                        <button onClick={handleAddUser}>Add</button>
+                        <button onClick={handleCancel}>Cancel</button>
+                    </div>
                 </div>
-            </div>
             )}
-
         </div>
     );
 }

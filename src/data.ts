@@ -1,4 +1,3 @@
-// Типи для даних
 export interface Country {
   name: string;
   value: string;
@@ -21,7 +20,6 @@ export interface User {
   country: Country;
 }
 
-// Дані
 export const Countries: Country[] = [
   { name: "Ukraine", value: "UA" },
   { name: "United States", value: "US" },

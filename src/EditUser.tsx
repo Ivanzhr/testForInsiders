@@ -33,18 +33,22 @@ function EditUser() {
         console.log(selectedUser)
     };
 
-    const update= ()=> {
-        users.forEach(elem => {
-            if (elem.name === selectedUser.name){
-                elem.department = selectedUser.department
-                elem.country = selectedUser.country
-                elem.status = selectedUser.status
+    const update = () => {
+        const updatedUsers = users.map(elem => {
+            if (elem.name === selectedUser.name) {
+                return {
+                    ...elem,
+                    department: selectedUser.department,
+                    country: selectedUser.country,
+                    status: selectedUser.status
+                };
             }
+            return elem;
         });
-          
-        console.log(selectedUser)
-        console.log(users)
-    }
+        setUsers(updatedUsers);
+    
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+    };
 
     const resetDate = ()=> {
         setSelectedUser(null)
